@@ -7,9 +7,9 @@ Single source of truth: /starter-prompt-opus.md (the PROMPT body between the
 import pathlib
 import html
 
-ROOT = pathlib.Path(__file__).resolve().parents[2]  # repo root: StarshipOmniOS/
+ROOT = pathlib.Path(__file__).resolve().parent  # repo root (script lives here now)
 SRC = ROOT / "starter-prompt-opus.md"
-OUT = ROOT / "apps" / "launch-page" / "index.html"
+OUT = ROOT / "index.html"
 
 lines = SRC.read_text().splitlines()
 b = next(i for i, l in enumerate(lines) if l.strip() == "=== BEGIN PROMPT ===")
