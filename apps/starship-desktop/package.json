@@ -1,0 +1,39 @@
+{
+  "name": "starship-desktop",
+  "version": "1.0.0",
+  "description": "Starship Omni OS — Claude Command Center",
+  "author": "drea-omni",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/drea-omni/starship_os.git"
+  },
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.35.0",
+    "@xterm/addon-fit": "^0.11.0",
+    "marked": "^12.0.2",
+    "node-pty": "^1.1.0",
+    "xterm": "^5.3.0"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "co.omni.starship-desktop",
+    "productName": "Starship Omni OS",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "assets/icon.icns"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "publish": null
+  }
+}

@@ -1,0 +1,31 @@
+# Internal spine + operator files
+spine/
+operator/
+memory/
+.claude/
+scripts/
+prompts/
+Previous Crew/
+
+# Internal docs
+CLAUDE.md
+ONBOARDING.md
+00-START-HERE.md
+01-THE-BRIDGE.md
+02-work-raw-narrative.md
+03-MA-Operating-Model-SANITIZED.md
+04-RESUME-ROADMAP.md
+05-outline-for-TEM-agents.md
+starter-prompt.md
+
+# Presentations
+*.pptx
+*.gslides
+
+# App build artifacts
+apps/starship-desktop/node_modules/
+apps/starship-desktop/dist/
+apps/starship-desktop/all-the-blobbies-main/
+
+# macOS
+.DS_Store

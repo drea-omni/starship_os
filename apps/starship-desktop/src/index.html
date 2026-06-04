@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Starship Omni OS</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="../node_modules/xterm/css/xterm.css" />
+</head>
+<body>
+
+  <!-- LCARS Top Bar -->
+  <header class="lcars-header">
+    <div class="lcars-elbow lcars-elbow--topleft"></div>
+    <div class="lcars-header-center">
+      <div class="lcars-title-block">
+        <span class="lcars-label">STARSHIP</span>
+        <span class="lcars-title">OMNI OS</span>
+        <span class="lcars-label">COMMAND CENTER</span>
+      </div>
+      <div class="lcars-header-right">
+        <div class="status-inline">
+          <div class="status-dot status-dot--idle" id="statusDot"></div>
+          <span id="statusText">INITIALIZING</span>
+        </div>
+        <button class="lcars-btn lcars-btn--outline" id="previewToggleBtn" title="Toggle file preview panel">▧ PREVIEW</button>
+        <button class="lcars-btn lcars-btn--outline" id="clearBtn" title="Clear conversation context (/clear)">/CLEAR</button>
+        <button class="lcars-btn lcars-btn--pink" id="restartBtn" title="Kill and restart Claude session (no wrap)">⟳ RESTART</button>
+        <button class="lcars-btn lcars-btn--wrap" id="wrapBtn" title="Trigger Computer end program — graceful session wrap">⚑ WRAP SESSION</button>
+        <button class="lcars-btn lcars-btn--outline" id="themeToggleBtn" title="Toggle dark/light mode">☀</button>
+        <button class="lcars-btn lcars-btn--outline" id="settingsBtn" title="Settings">⚙ CONFIG</button>
+        <div class="blobby-container" title="Blobby says hello!" id="blobbyContainer">
+          <canvas id="blobby" width="48" height="48"></canvas>
+          <img id="blobbyImg" class="blobby-custom hidden" alt="Blobby" />
+        </div>
+        <button class="lcars-btn lcars-btn--exit" id="exitBtn" title="Quit Starship Omni OS">⏻</button>
+      </div>
+    </div>
+    <div class="lcars-elbow lcars-elbow--topright"></div>
+  </header>
+
+  <!-- Main Layout -->
+  <main class="lcars-main">
+
+    <!-- Left Sidebar -->
+    <aside class="lcars-sidebar">
+      <div class="sidebar-rail"></div>
+      <div class="sidebar-content">
+        <div class="sidebar-section">
+          <div class="sidebar-label">QUICK REF</div>
+          <div class="sidebar-sublabel">SHORTCUTS</div>
+          <div class="sidebar-ref-item sidebar-ref-static"><span class="sidebar-ref-key">⌘K</span> clear terminal</div>
+          <div class="sidebar-ref-item sidebar-ref-static"><span class="sidebar-ref-key">⌘R</span> restart session</div>
+          <div class="sidebar-ref-item sidebar-ref-static"><span class="sidebar-ref-key">⌘P</span> toggle preview</div>
+          <div class="sidebar-ref-item sidebar-ref-static"><span class="sidebar-ref-key">⌘,</span> open config</div>
+          <div class="sidebar-sublabel" style="margin-top:0.5rem">MODE CYCLING</div>
+          <div class="sidebar-ref-item sidebar-ref-static"><span class="sidebar-ref-key">⇧Tab</span> plan → edit → auto</div>
+          <div class="sidebar-sublabel" style="margin-top:0.5rem">CLAUDE COMMANDS</div>
+          <div class="sidebar-ref-item sidebar-cmd" data-cmd="/model" title="Switch AI model">/model</div>
+          <div class="sidebar-ref-item sidebar-cmd" data-cmd="/clear" title="Clear context">/clear</div>
+          <div class="sidebar-ref-item sidebar-cmd" data-cmd="/cost" title="Show session cost">/cost</div>
+          <div class="sidebar-ref-item sidebar-cmd" data-cmd="/compact" title="Compact context">/compact</div>
+          <div class="sidebar-ref-item sidebar-cmd" data-cmd="/status" title="Show Claude status">/status</div>
+          <div class="sidebar-ref-item sidebar-cmd" data-cmd="/help" title="List all commands">/help</div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-label">FILES</div>
+          <button class="lcars-btn lcars-btn--outline w-full" id="openFileBtn">OPEN .MD FILE</button>
+        </div>
+        <div class="sidebar-section sidebar-section--grow"></div>
+        <div class="sidebar-section">
+          <div class="sidebar-label">WORKING DIR</div>
+          <div class="cwd-display" id="cwdDisplay">—</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content area: terminal + optional preview panel -->
+    <div class="lcars-content-split" id="contentSplit">
+
+      <!-- Terminal Section -->
+      <section class="terminal-section" id="terminalSection">
+        <div id="terminal-container"></div>
+      </section>
+
+      <!-- Preview Panel (hidden by default) -->
+      <aside class="preview-panel hidden" id="previewPanel">
+        <div class="preview-panel-header">
+          <div class="preview-panel-rail"></div>
+          <span class="preview-panel-title" id="previewFileName">NO FILE LOADED</span>
+          <button class="preview-open-btn lcars-btn lcars-btn--outline" id="previewOpenBtn" title="Open a file">OPEN</button>
+          <button class="preview-close-btn" id="previewCloseBtn" title="Close preview">✕</button>
+        </div>
+        <div class="preview-panel-body" id="previewBody">
+          <div class="preview-empty" id="previewEmpty">
+            <span class="preview-empty-icon">◧</span>
+            <p>No file loaded.</p>
+            <p>Click OPEN, click a link in the terminal, or use the sidebar to open a .md file.</p>
+          </div>
+          <iframe id="previewFrame" class="preview-frame hidden" sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+      </aside>
+
+    </div><!-- /.lcars-content-split -->
+
+  </main>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal" class="modal-overlay hidden">
+    <div class="modal lcars-modal">
+      <div class="modal-header">
+        <div class="modal-title-rail"></div>
+        <span class="modal-title">SYSTEM CONFIGURATION</span>
+        <button class="modal-close" id="settingsClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">WORKING DIRECTORY</label>
+          <div class="folder-input-row">
+            <input type="text" id="workingDirInput" class="lcars-input" placeholder="/path/to/your/StarshipOmniOS" />
+            <button class="lcars-btn lcars-btn--outline" id="browseFolderBtn">BROWSE</button>
+          </div>
+          <span class="form-hint">The folder Claude Code will launch in. Must contain a CLAUDE.md to load your OS.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">STARTER PROMPT</label>
+          <textarea id="starterPromptInput" class="lcars-textarea lcars-textarea--tall" placeholder="Leave blank to use the bundled Starship starter prompt — or paste your own here. LAUNCH STARTER sends it to Claude to begin building your OS…"></textarea>
+          <span class="starter-prompt-hint">For first-time setup: just click LAUNCH STARTER — the built-in starter prompt loads automatically. To use your own, paste it here first. For an existing OS, ignore this — your CLAUDE.md loads on its own.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">APPEARANCE</label>
+          <div class="theme-toggle-row">
+            <button class="lcars-btn theme-btn" id="themeDarkBtn" data-theme="dark">◑ DARK</button>
+            <button class="lcars-btn theme-btn" id="themeLightBtn" data-theme="light">☀ LIGHT</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">TERMINAL BACKGROUND</label>
+          <div class="color-row">
+            <input type="color" id="termBgPicker" class="lcars-color-swatch" value="#050d1a" />
+            <input type="text" id="termBgHex" class="lcars-input" placeholder="#050d1a" />
+          </div>
+          <span class="form-hint">Custom background color for the embedded terminal.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">TERMINAL FONT</label>
+          <div class="preview-style-row">
+            <label class="form-mini-label">FAMILY</label>
+            <input type="text" id="termFontInput" class="lcars-input" placeholder="Share Tech Mono" />
+          </div>
+          <div class="preview-style-row" style="margin-top:6px">
+            <label class="form-mini-label">SIZE</label>
+            <select id="termFontSizeSelect" class="lcars-select">
+              <option value="11">11px</option>
+              <option value="12">12px</option>
+              <option value="13">13px</option>
+              <option value="14" selected>14px</option>
+              <option value="15">15px</option>
+              <option value="16">16px</option>
+              <option value="18">18px</option>
+              <option value="20">20px</option>
+            </select>
+          </div>
+          <span class="form-hint">Font family and size for the embedded Claude Code terminal. Defaults to Share Tech Mono 14px.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">AUTO GREET</label>
+          <label class="toggle-row">
+            <input type="checkbox" id="autoGreetCheck" />
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            <span class="form-hint">Send "Computer, good morning" when terminal connects</span>
+          </label>
+        </div>
+        <!-- Feature 3: Preview Customization -->
+        <div class="form-group">
+          <label class="form-label">PREVIEW STYLE</label>
+          <div class="preview-style-row">
+            <label class="form-mini-label">FONT SIZE</label>
+            <select id="previewFontSize" class="lcars-select">
+              <option value="12px">12px</option>
+              <option value="14px" selected>14px</option>
+              <option value="16px">16px</option>
+              <option value="18px">18px</option>
+            </select>
+            <label class="form-mini-label">BACKGROUND</label>
+            <input type="color" id="previewBgPicker" class="lcars-color-swatch" />
+            <input type="text" id="previewBgHex" class="lcars-input lcars-input--short" placeholder="default" />
+          </div>
+          <div class="preview-advanced-toggle" id="previewAdvancedToggle">▶ ADVANCED</div>
+          <div class="preview-advanced hidden" id="previewAdvanced">
+            <div class="preview-style-row">
+              <label class="form-mini-label">LINE HEIGHT</label>
+              <input type="text" id="previewLineHeight" class="lcars-input lcars-input--short" placeholder="1.7" />
+              <label class="form-mini-label">FONT FAMILY</label>
+              <input type="text" id="previewFontFamily" class="lcars-input" placeholder="Inter" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 5: Blobby Picker -->
+        <div class="form-group">
+          <label class="form-label">BLOBBY</label>
+          <div class="blobby-grid" id="blobbyGrid">
+            <!-- populated by renderer.js -->
+          </div>
+          <button class="lcars-btn lcars-btn--outline" id="blobbyFolderBtn" style="margin-top:0.5rem">LOAD FROM FOLDER</button>
+        </div>
+
+        <div class="modal-actions">
+          <button class="lcars-btn lcars-btn--outline" id="launchStarterBtn">▶ LAUNCH STARTER</button>
+          <button class="lcars-btn lcars-btn--pink" id="saveSettingsBtn">SAVE CONFIG</button>
+          <button class="lcars-btn lcars-btn--outline" id="cancelSettingsBtn">CANCEL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../node_modules/xterm/lib/xterm.js"></script>
+  <script src="../node_modules/@xterm/addon-fit/lib/addon-fit.js"></script>
+  <script src="starter-prompt.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>
