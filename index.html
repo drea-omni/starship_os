@@ -99,9 +99,13 @@
     <section class="pb-20 md:pb-28">
       <div class="rounded-xl border border-[#1B3252]" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
         <div class="bg-[#0C1B30] rounded-t-xl flex items-center justify-between px-5 py-3">
-          <span class="font-mono text-sm text-[#9FB3D2]">starter-prompt.md &mdash; Opus edition</span>
+          <button id="prompt-toggle" class="flex items-center gap-3 text-left cursor-pointer bg-transparent" aria-expanded="false" aria-controls="prompt-panel">
+            <span id="prompt-chevron" class="font-mono text-[#7E97B8] text-base transition-transform duration-200">&#9656;</span>
+            <span class="font-mono text-sm text-[#9FB3D2]">Starter Prompt &mdash; v2</span>
+          </button>
           <button id="code-copy-btn" class="bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer">Copy</button>
         </div>
+        <div id="prompt-panel" class="hidden">
         <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 480px; padding: 24px 20px;">
           <pre class="font-mono text-[12.5px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="prompt-content">You are about to help the user build their own personal operating system — a &quot;starship&quot; run by a named crew of specialist sub-agents, with an ambient ship-intelligence that the user talks to and an orchestrator that routes work, all riding on a shared memory spine. You will run a short interview, design the crew from what you learn, name everything after a mythos the user picks, and then generate every file the system needs. At the end, the system boots and the user can use it right away.
 
@@ -455,6 +459,7 @@ Before you draw that first boot, give one short confirmation line of what you bu
 
 Now begin at PART 1. Greet, orient, and ask Q1.</code></pre>
         </div>
+        </div>
       </div>
       <p class="text-sm text-[#7E97B8] text-center mt-6">~9,800 tokens. Paste it into Claude Code (or any AI with filesystem access) and start building.</p>
     </section>
@@ -548,6 +553,16 @@ Now begin at PART 1. Greet, orient, and ask Q1.</code></pre>
       flashCopy(this, 'Copied',
         ['text-green-400'],
         ['text-[#7E97B8]']);
+    });
+
+    const promptToggle = document.getElementById('prompt-toggle');
+    const promptPanel = document.getElementById('prompt-panel');
+    const promptChevron = document.getElementById('prompt-chevron');
+    promptToggle.addEventListener('click', function () {
+      const expanded = promptToggle.getAttribute('aria-expanded') === 'true';
+      promptToggle.setAttribute('aria-expanded', String(!expanded));
+      promptPanel.classList.toggle('hidden', expanded);
+      promptChevron.style.transform = expanded ? 'rotate(0deg)' : 'rotate(90deg)';
     });
   </script>
 </body>
