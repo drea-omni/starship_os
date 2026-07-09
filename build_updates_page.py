@@ -145,7 +145,7 @@ TEMPLATE = f'''<!DOCTYPE html>
 </head>
 <body class="bg-[#091324] text-[#E6ECF5] font-sans">
 
-  <div class="relative w-full hero-glow" style="max-height: 220px; overflow: hidden;">
+  <div class="relative w-full hero-glow" style="height: 220px; overflow: hidden;">
     <div class="absolute inset-0" style="background: linear-gradient(to bottom, transparent 30%, #091324 100%);"></div>
   </div>
 
@@ -153,7 +153,7 @@ TEMPLATE = f'''<!DOCTYPE html>
 
     <!-- Header -->
     <section class="pt-12 pb-10">
-      <a href="index.html" class="font-mono text-xs uppercase text-[#7E97B8] hover:text-[#9FB3D2] tracking-[0.14em] transition-colors">&larr; Back to Starship OS</a>
+      <a href="index.html" class="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase text-[#091324] bg-[#FF2E88] tracking-[0.14em] px-4 py-2.5 rounded-lg hover:bg-[#FF5BA3] transition-all">&larr; Home</a>
       <div class="flex items-center gap-3 mt-6 mb-6">
         <span class="lcars-pill bg-[#FF2E88] h-3 w-10 inline-block"></span>
         <p class="font-mono text-xs uppercase text-[#7E97B8] tracking-[0.18em]">For existing ships &middot; not a fresh build</p>
