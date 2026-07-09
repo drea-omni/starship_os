@@ -37,6 +37,7 @@
     .code-block-body::-webkit-scrollbar-thumb { background: #2A4A74; border-radius: 4px; }
     .code-block-body::-webkit-scrollbar-thumb:hover { background: #3D6299; }
     .lcars-pill { border-radius: 9999px; }
+    .update-toggle[aria-expanded="true"] .update-chevron { transform: rotate(90deg); }
   </style>
 </head>
 <body class="bg-[#091324] text-[#E6ECF5] font-sans">
@@ -48,7 +49,7 @@
   <div class="max-w-[840px] mx-auto px-6 md:px-8 lg:px-0" style="margin-top: -140px; position: relative; z-index: 10;">
 
     <!-- Header -->
-    <section class="pt-12 pb-14">
+    <section class="pt-12 pb-10">
       <a href="index.html" class="font-mono text-xs uppercase text-[#7E97B8] hover:text-[#9FB3D2] tracking-[0.14em] transition-colors">&larr; Back to Starship OS</a>
       <div class="flex items-center gap-3 mt-6 mb-6">
         <span class="lcars-pill bg-[#FF2E88] h-3 w-10 inline-block"></span>
@@ -58,27 +59,40 @@
       <p class="text-lg text-[#9FB3D2] max-w-[620px]">Already built a ship from the starter prompt? These are standalone, paste-able upgrade prompts &mdash; apply just the ones you want, in any order, without rerunning the full interview. Each one figures out your ship's actual file names and mythos on its own.</p>
     </section>
 
-    <!-- v2 series -->
-    <section class="pb-16">
-      <div class="flex items-baseline justify-between mb-2">
+    <!-- Tabs -->
+    <div class="flex items-center gap-3 mb-10 flex-wrap">
+      <button class="tab-btn font-mono text-xs uppercase tracking-[0.12em] px-4 py-2.5 rounded-lg transition-all cursor-pointer bg-[#FF2E88] text-[#091324] font-semibold" data-tab="v2">V2 Architecture</button>
+      <button class="tab-btn font-mono text-xs uppercase tracking-[0.12em] px-4 py-2.5 rounded-lg transition-all cursor-pointer text-[#9FB3D2] border border-[#1B3252] hover:border-[#2F5A8C] hover:text-[#E6ECF5]" data-tab="v1">V1.0 → V1.1 Architecture</button>
+    </div>
+
+    
+    <section id="tab-panel-v2" class="tab-panel pb-16" data-tab="v2">
+      <div class="flex items-baseline justify-between mb-2 gap-4 flex-wrap">
         <h2 class="font-display text-2xl font-semibold text-[#E6ECF5] uppercase tracking-[-0.01em]">Series: v2 architecture</h2>
-        <span class="font-mono text-xs text-[#7E97B8]">6 updates</span>
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs text-[#7E97B8]">6 updates</span>
+          <button class="copy-all-btn bg-transparent text-[#9FD3DC] font-mono text-xs px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:border-[#2F5A8C] transition-all cursor-pointer uppercase tracking-wide" data-ids="update-prompt-v2-1,update-prompt-v2-2,update-prompt-v2-3,update-prompt-v2-4,update-prompt-v2-5,update-prompt-v2-6" data-label="Copy all 6">Copy all 6</button>
+        </div>
       </div>
       <p class="text-sm text-[#9FB3D2] mb-8 max-w-[620px]">Core-architecture patterns folded into the v2 starter prompt: spine index/detail splitting, external task-board sync, entity spine files, a standing status index, two-tier context awareness, and an automation-mechanism guardrail. None depend on each other.</p>
 
       
-        <div class="rounded-xl border border-[#1B3252] mb-8" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
-          <div class="px-5 py-4 border-b border-[#1B3252]">
-            <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-2">Update 1 of 6</p>
-            <h3 class="font-display text-xl font-semibold text-[#E6ECF5] mb-2 uppercase">Spine index/detail file splitting</h3>
-            <p class="text-sm text-[#9FB3D2]">If your dispatch log or open-questions register has grown long, boot is re-reading the whole thing every session. This splits high-frequency spine files into a lightweight index (boot reads every time) and a full detail file (pulled only when actively working that thread).</p>
-          </div>
-          <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3">
-            <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
-            <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-1">Copy</button>
-          </div>
-          <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
-            <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-1">Your ship&#x27;s boot sequence currently reads the full orchestration/dispatch log and the full open-questions register at every session open. I want to split both into a lightweight index + full detail file, so boot stays cheap as they grow.
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v2-1" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 1 of 6</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">Spine index/detail file splitting</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">If your dispatch log or open-questions register has grown long, boot is re-reading the whole thing every session. This splits high-frequency spine files into a lightweight index (boot reads every time) and a full detail file (pulled only when actively working that thread).</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v2-1" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v2-1">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v2-1">Your ship&#x27;s boot sequence currently reads the full orchestration/dispatch log and the full open-questions register at every session open. I want to split both into a lightweight index + full detail file, so boot stays cheap as they grow.
 
 1. Find your ship&#x27;s dispatch/orchestration log (tracks work handed to crew members) and your open-questions/parked-questions register. They&#x27;re probably under a spine/memory directory — find them by content, not by an assumed filename.
 
@@ -93,21 +107,26 @@
 6. Backfill the two new index files from whatever&#x27;s currently open in the existing full files, so this doesn&#x27;t lose any live state.
 
 Show me the new file structure and the boot-sequence diff before you finalize anything.</code></pre>
+            </div>
           </div>
         </div>
 
-        <div class="rounded-xl border border-[#1B3252] mb-8" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
-          <div class="px-5 py-4 border-b border-[#1B3252]">
-            <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-2">Update 2 of 6</p>
-            <h3 class="font-display text-xl font-semibold text-[#E6ECF5] mb-2 uppercase">External task-board sync</h3>
-            <p class="text-sm text-[#9FB3D2]">Adds an optional integration with a task app you already use (Asana, Trello, Linear, etc.) as a phone-accessible mirror of your open loops — checkable between sessions, read back in at boot.</p>
-          </div>
-          <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3">
-            <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
-            <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-2">Copy</button>
-          </div>
-          <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
-            <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-2">I want my ship&#x27;s open loops mirrored to [NAME YOUR TASK APP — e.g. Asana, Trello, Linear] so I can check things off from my phone between sessions, and have my ship read completions back in at the next boot.
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v2-2" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 2 of 6</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">External task-board sync</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">Adds an optional integration with a task app you already use (Asana, Trello, Linear, etc.) as a phone-accessible mirror of your open loops — checkable between sessions, read back in at boot.</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v2-2" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v2-2">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v2-2">I want my ship&#x27;s open loops mirrored to [NAME YOUR TASK APP — e.g. Asana, Trello, Linear] so I can check things off from my phone between sessions, and have my ship read completions back in at the next boot.
 
 1. Confirm what MCP or API access you have to [YOUR TASK APP] in this environment. If none, tell me what&#x27;s needed before we go further.
 
@@ -120,21 +139,26 @@ Show me the new file structure and the boot-sequence diff before you finalize an
 5. This is a *view*, not a replacement for my session spine — the spine stays the narrative record of what happened; the task board is just a live checklist. Make sure nothing you write treats the task board as ground truth.
 
 Write this into whichever file(s) define my boot and wrap rituals. Show me the diff before finalizing.</code></pre>
+            </div>
           </div>
         </div>
 
-        <div class="rounded-xl border border-[#1B3252] mb-8" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
-          <div class="px-5 py-4 border-b border-[#1B3252]">
-            <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-2">Update 3 of 6</p>
-            <h3 class="font-display text-xl font-semibold text-[#E6ECF5] mb-2 uppercase">Entity spine files</h3>
-            <p class="text-sm text-[#9FB3D2]">If any of your crew members track multiple ongoing relationships (clients, projects, people, partners), this gives each one its own persistent file instead of letting that context get buried in the general session log.</p>
-          </div>
-          <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3">
-            <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
-            <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-3">Copy</button>
-          </div>
-          <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
-            <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-3">One of my crew members — [NAME THE ROLE, e.g. &quot;my Build-Path Architect&quot; or whatever tracks per-client/per-project work] — currently has to reconstruct context about each relationship by searching back through my general session log. I want dedicated per-entity files instead.
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v2-3" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 3 of 6</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">Entity spine files</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">If any of your crew members track multiple ongoing relationships (clients, projects, people, partners), this gives each one its own persistent file instead of letting that context get buried in the general session log.</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v2-3" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v2-3">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v2-3">One of my crew members — [NAME THE ROLE, e.g. &quot;my Build-Path Architect&quot; or whatever tracks per-client/per-project work] — currently has to reconstruct context about each relationship by searching back through my general session log. I want dedicated per-entity files instead.
 
 1. Find that crew member&#x27;s spec file and figure out what kind of entity they track (clients? projects? people? something else).
 
@@ -145,21 +169,26 @@ Write this into whichever file(s) define my boot and wrap rituals. Show me the d
 4. Backfill what you can find from existing session history into the new per-entity files — don&#x27;t leave them empty if there&#x27;s real prior context sitting in old spine entries.
 
 Show me the new file structure and a sample populated entity file before you backfill everything.</code></pre>
+            </div>
           </div>
         </div>
 
-        <div class="rounded-xl border border-[#1B3252] mb-8" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
-          <div class="px-5 py-4 border-b border-[#1B3252]">
-            <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-2">Update 4 of 6</p>
-            <h3 class="font-display text-xl font-semibold text-[#E6ECF5] mb-2 uppercase">Standing status index</h3>
-            <p class="text-sm text-[#9FB3D2]">Once you have entity spine files (Update 3), this adds a single at-a-glance rollup across all of them — so you don&#x27;t have to open ten files to see where everything stands.</p>
-          </div>
-          <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3">
-            <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
-            <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-4">Copy</button>
-          </div>
-          <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
-            <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-4">I now have per-entity spine files (clients/projects/people — see Update 3). I want a single standing index that rolls them all up into one at-a-glance view.
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v2-4" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 4 of 6</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">Standing status index</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">Once you have entity spine files (Update 3), this adds a single at-a-glance rollup across all of them — so you don&#x27;t have to open ten files to see where everything stands.</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v2-4" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v2-4">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v2-4">I now have per-entity spine files (clients/projects/people — see Update 3). I want a single standing index that rolls them all up into one at-a-glance view.
 
 1. Find the entity spine files created in Update 3.
 
@@ -170,21 +199,26 @@ Show me the new file structure and a sample populated entity file before you bac
 4. Tell me what phrase to use when I want it refreshed (e.g. &quot;refresh my [domain] index&quot;) and wire that phrase to regenerate the file from the current state of all entity spines.
 
 Show me the generated file and confirm the refresh trigger phrase with me before finalizing.</code></pre>
+            </div>
           </div>
         </div>
 
-        <div class="rounded-xl border border-[#1B3252] mb-8" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
-          <div class="px-5 py-4 border-b border-[#1B3252]">
-            <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-2">Update 5 of 6</p>
-            <h3 class="font-display text-xl font-semibold text-[#E6ECF5] mb-2 uppercase">Two-tier context awareness</h3>
-            <p class="text-sm text-[#9FB3D2]">If your ship only warns you about one kind of context pressure, this splits it into the two things that actually happen at different points: the model&#x27;s real token ceiling, and (if your platform has one) an earlier harness-level compaction/summarization threshold.</p>
-          </div>
-          <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3">
-            <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
-            <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-5">Copy</button>
-          </div>
-          <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
-            <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-5">My ship currently has one context-awareness warning. I want it split into two distinct signals, because they mean different things and happen at different times.
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v2-5" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 5 of 6</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">Two-tier context awareness</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">If your ship only warns you about one kind of context pressure, this splits it into the two things that actually happen at different points: the model&#x27;s real token ceiling, and (if your platform has one) an earlier harness-level compaction/summarization threshold.</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v2-5" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v2-5">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v2-5">My ship currently has one context-awareness warning. I want it split into two distinct signals, because they mean different things and happen at different times.
 
 1. Find wherever my ship&#x27;s spec currently describes context/token awareness (likely in the boot-identity spec file).
 
@@ -197,21 +231,26 @@ Show me the generated file and confirm the refresh trigger phrase with me before
 4. Both warnings should fire once, not repeatedly — escalate only if the session keeps running well past the first flag.
 
 Show me the rewritten section before finalizing.</code></pre>
+            </div>
           </div>
         </div>
 
-        <div class="rounded-xl border border-[#1B3252] mb-8" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
-          <div class="px-5 py-4 border-b border-[#1B3252]">
-            <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-2">Update 6 of 6</p>
-            <h3 class="font-display text-xl font-semibold text-[#E6ECF5] mb-2 uppercase">Automation-mechanism guardrail</h3>
-            <p class="text-sm text-[#9FB3D2]">If your ship (or any crew member) runs scheduled/recurring automation, this makes sure you&#x27;re using a mechanism that actually survives — not one that silently expires.</p>
-          </div>
-          <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3">
-            <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
-            <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-6">Copy</button>
-          </div>
-          <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
-            <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-6">I want to add a guardrail to my ship about picking the right automation mechanism, because I don&#x27;t want to accidentally schedule something that silently stops working.
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v2-6" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 6 of 6</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">Automation-mechanism guardrail</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">If your ship (or any crew member) runs scheduled/recurring automation, this makes sure you&#x27;re using a mechanism that actually survives — not one that silently expires.</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v2-6" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v2-6">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v2-6">I want to add a guardrail to my ship about picking the right automation mechanism, because I don&#x27;t want to accidentally schedule something that silently stops working.
 
 1. Check what scheduling/automation mechanisms are actually available in this environment. Some platforms offer both a session-scoped kind (tied to or expiring with a session) and a durable/cloud-triggered kind (keeps running independent of any open session) — others only offer one.
 
@@ -222,17 +261,263 @@ Show me the rewritten section before finalizing.</code></pre>
 4. Audit anything I&#x27;ve already scheduled in this system and flag if it&#x27;s using the wrong mechanism for how long I actually need it to run.
 
 Report back what you found before changing anything.</code></pre>
+            </div>
           </div>
         </div>
     </section>
 
-    <!-- Coming soon -->
-    <section class="pb-20">
-      <div class="rounded-xl border border-dashed border-[#1B3252] px-6 py-8">
-        <p class="font-mono text-xs uppercase text-[#7E97B8] tracking-[0.14em] mb-3">Coming soon</p>
-        <h3 class="font-display text-xl font-semibold text-[#E6ECF5] mb-3 uppercase">Series: v1.0 &rarr; v1.1 behavioral evolution</h3>
-        <p class="text-sm text-[#9FB3D2] max-w-[600px]">A second, larger series covering the full behavioral evolution beyond core architecture &mdash; new crew roles, connector protocols, standing rules, and board-display conventions. These are also being folded back into the starter prompt itself where they generalize. Check back for updates.</p>
+    <section id="tab-panel-v1" class="tab-panel pb-16 hidden" data-tab="v1">
+      <div class="flex items-baseline justify-between mb-2 gap-4 flex-wrap">
+        <h2 class="font-display text-2xl font-semibold text-[#E6ECF5] uppercase tracking-[-0.01em]">Series: v1.0 → v1.1 architecture</h2>
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs text-[#7E97B8]">8 updates</span>
+          <button class="copy-all-btn bg-transparent text-[#9FD3DC] font-mono text-xs px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:border-[#2F5A8C] transition-all cursor-pointer uppercase tracking-wide" data-ids="update-prompt-v1-1,update-prompt-v1-2,update-prompt-v1-3,update-prompt-v1-4,update-prompt-v1-5,update-prompt-v1-6,update-prompt-v1-7,update-prompt-v1-8" data-label="Copy all 8">Copy all 8</button>
+        </div>
       </div>
+      <p class="text-sm text-[#9FB3D2] mb-8 max-w-[620px]">Architecture and process patterns generalized from a mature, months-old ship's behavioral evolution — boot-behavior placement, file-based memory, connector patterns, a lessons log, standing board items, an intake-folder check, and a cost-efficiency guardrail. Anything too specific to one ship's exact tool stack was left out.</p>
+
+      
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v1-1" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 1 of 8</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">Boot behavior must live in the boot</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">Closes a subtle but common gap: a behavior written into a crew member&#x27;s spec file doesn&#x27;t run automatically — specs are inert until dispatched. Anything that must happen before your ship&#x27;s first response has to live in the main instruction file itself.</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v1-1" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v1-1">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v1-1">I want to audit my ship for behaviors that were written into a crew member&#x27;s spec file but were actually meant to happen automatically, every session, before any dispatch occurs. Those don&#x27;t work — a crew spec is inert until something dispatches it; only the main instruction file (and the boot-identity spec it points to) runs unconditionally at session start.
+
+1. Read my main instruction file and my boot-identity spec (the Ship/Computer/Oracle/whatever-I-named-it file) and list every behavior that&#x27;s supposed to happen automatically at session open — silent reads, alerts, standing checks, anything that isn&#x27;t a response to a specific user request.
+
+2. Now check every other crew member&#x27;s spec file for behaviors described in language like &quot;at every session,&quot; &quot;always,&quot; &quot;on boot,&quot; or &quot;automatically&quot; that aren&#x27;t actually referenced anywhere in the main instruction file&#x27;s boot sequence.
+
+3. For anything you find in step 2: either (a) move the trigger into the main instruction file&#x27;s boot sequence, explicitly naming which crew member&#x27;s logic runs and when, or (b) if it&#x27;s not actually meant to be automatic, correct the language in that crew member&#x27;s spec so it&#x27;s clear it only runs when dispatched.
+
+4. State this as a standing rule somewhere visible (main instruction file or boot spec): &quot;Any behavior required before the first response must live in the main instruction file or the files it explicitly reads at boot. Crew specs are inert until dispatched.&quot;
+
+Report what you found before changing anything — I want to see the list of gaps first.</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v1-2" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 2 of 8</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">File-based spine over cloud memory API</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">Documents (or re-confirms) a specific architectural tradeoff: for anything read at high frequency — every session open — plain files on disk beat a cloud memory store or API, even though cloud stores sound more &quot;proper.&quot;</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v1-2" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v1-2">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v1-2">I want you to evaluate whether my ship&#x27;s memory/spine should stay file-based or move to a cloud memory API, and document the decision either way so it doesn&#x27;t get re-litigated later.
+
+1. Identify what my current memory setup actually is — plain markdown/text files on disk, a cloud memory API, a database, or some mix.
+
+2. Reason through the tradeoff explicitly: files read at every session open benefit from being local (no network latency, no API cost per read, works offline, trivially diffable/greppable). A cloud memory store adds cost and latency to something that happens dozens of times a week, and most cloud memory products are optimized for semantic search over large corpora, not for &quot;read the same five files every single time.&quot;
+
+3. If I already have a sync/backup mechanism for my files (a synced drive folder, git, etc.), note that this already solves the durability problem a cloud store would solve — so the cloud store isn&#x27;t buying me anything my current setup doesn&#x27;t already have.
+
+4. Write your recommendation into a short decision note in my spine (a lessons log if I have one — see Update 5 — otherwise a new short file). State the decision and the reasoning in 3-4 sentences so future-me (or future-you) doesn&#x27;t reopen this question without new information.
+
+Tell me your recommendation and reasoning before writing anything.</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v1-3" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 3 of 8</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">Distill-once-route-many</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">If any crew member processes external sources (meeting transcripts, documents, long threads), this stops multiple officers from each independently re-processing the same source — one distillation, tagged by domain, routed to whoever needs which piece.</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v1-3" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v1-3">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v1-3">I want to check whether any of my crew members are redundantly re-processing the same external source — the same meeting transcript, document, or thread — separately, each doing their own pass over the raw material.
+
+1. Find any crew member(s) whose job involves reading external sources (meeting notes, transcripts, documents, long message threads) and extracting information for different purposes.
+
+2. If two or more crew members would plausibly need different pieces of the same source (e.g., one needs the technical details, another needs the relationship/sentiment signals, another needs action items), check whether each of them currently does its own independent read of the raw source.
+
+3. If they do: redesign so there&#x27;s exactly one distillation pass per source. That pass reads the raw material once and produces a single structured output with clearly domain-tagged sections (e.g., &quot;## Technical,&quot; &quot;## Relationship,&quot; &quot;## Action Items&quot;). Other crew members read the relevant section of the distillation, not the raw source again.
+
+4. Decide who owns the distillation step — usually whichever crew member is positioned as the general intake/librarian role, if I have one; otherwise pick the most central reader.
+
+5. Update the relevant crew specs to reflect: &quot;read the distillation, not the raw source&quot; for anyone who was previously doing their own pass.
+
+Show me which crew members were duplicating work before you change any specs.</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v1-4" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 4 of 8</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">Connector cookbook pattern</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">If your ship talks to several external tools (calendar, email, chat, CRM, docs), this consolidates each tool&#x27;s integration behavior into one named, numbered reference file instead of scattering that logic across every crew spec that touches it.</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v1-4" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v1-4">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v1-4">I want to consolidate how my ship uses each external tool/connector into dedicated reference files, instead of having the same tool-specific logic re-explained or duplicated across multiple crew specs.
+
+1. List every external tool/connector my ship actually uses (calendar, email, a chat platform, a CRM, a docs tool, whatever&#x27;s real for me) and which crew members touch each one.
+
+2. For each tool used by more than one crew member, or with more than one distinct usage pattern, create one reference file (e.g., spine/[tool]-patterns.md) that documents each distinct way it&#x27;s used as a numbered &quot;Pipeline&quot;: what triggers it, what it reads or writes, any gotchas or formatting requirements specific to that tool, and any tool-specific footguns already discovered in past sessions.
+
+3. Update every crew spec that touches that tool to reference the pipeline number instead of re-explaining the mechanics inline (e.g., &quot;uses Pipeline 3 from calendar-patterns.md for daily lookahead&quot; instead of restating the calendar-query logic in the crew spec itself).
+
+4. This is about eliminating duplication and drift, not adding process for its own sake — only do this for tools actually used by multiple crew members or in multiple distinct ways. A tool used once, one way, by one crew member doesn&#x27;t need its own cookbook file.
+
+Show me the proposed file structure before you start moving logic out of the crew specs.</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v1-5" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 5 of 8</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">Running numbered lessons log</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">Adds a distinct, append-only log for durable architectural decisions and lessons — separate from your day-to-day session spine, which is narrative and gets long. This is the place hard-won &quot;we tried X, it broke, do Y instead&quot; knowledge lives permanently.</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v1-5" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v1-5">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v1-5">I want a dedicated lessons log — a place for durable architectural decisions and hard-won lessons that&#x27;s separate from my regular session-by-session spine, because that file is narrative and grows long, and decisions get buried in it.
+
+1. Create a new file (e.g., spine/lessons.md) with a simple format: sequential IDs (L-001, L-002, ...), each with a one-line statement of the lesson/decision, and 1-3 sentences of why it matters or what happens if you ignore it.
+
+2. Scan my existing session spine for anything that reads like a durable decision rather than a day&#x27;s events — things like &quot;we decided X approach over Y because Z,&quot; or a correction to how the system should behave going forward, not just what happened on a given day. Pull candidates out and propose them as lesson entries; don&#x27;t move anything without showing me first.
+
+3. Going forward, tell me when to add an entry here versus just noting something in the regular session spine: if it&#x27;s a decision or lesson that should shape *future* behavior across many sessions, it goes in the lessons log. If it&#x27;s just what happened today, it stays in the session spine.
+
+4. Note in your main instruction file or boot spec that the lessons log exists and is a good place to check when reasoning about &quot;why do we do it this way&quot; questions — but it does NOT need to be read at every boot; it&#x27;s a reference, not a boot-read file.
+
+Show me the candidate lessons pulled from my existing spine before finalizing the new file.</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v1-6" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 6 of 8</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">Standing recurring board items</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">If you have a fixed recurring obligation (a weekly review, a regular report, anything on a schedule regardless of what else is going on), this makes sure it surfaces automatically instead of depending on someone remembering to add it.</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v1-6" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v1-6">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v1-6">I have at least one recurring obligation that should show up on my board automatically, on schedule, regardless of my current workload or posture — not something that has to be manually re-added each time. Help me encode it as a standing item.
+
+1. Ask me what the recurring obligation is (or I&#x27;ll tell you): what it is, how often (daily/weekly/monthly), and any specific day/time it&#x27;s tied to.
+
+2. Add a rule to my ship&#x27;s boot-identity spec (in the board-item shapes / prioritization section) stating: on [the relevant day/time], this item surfaces on the board automatically, regardless of posture mode — it does not get filtered out even in a &quot;low energy, 2-3 items only&quot; mode, because it&#x27;s non-negotiable.
+
+3. If I have more than one such recurring item, make this a general pattern rather than a one-off special case: a small table or list of &quot;standing items&quot; with their trigger condition (day/date/recurrence) and urgency, checked at every board surface alongside the regular dynamic items.
+
+4. Make sure this doesn&#x27;t turn into nagging — if I&#x27;ve already handled it this cycle, it shouldn&#x27;t keep surfacing until the next cycle comes around. Ask me how completion should be tracked (a checkbox in a file, a phrase I say, whatever&#x27;s lightweight) if it isn&#x27;t obvious.
+
+Confirm the recurring item(s) and trigger conditions with me before writing the rule.</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v1-7" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 7 of 8</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">External intake-folder check</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">If you have a shared drop location (a synced folder, a shared drive) where things land for your ship to process, this adds a boot-time check plus a &quot;processed&quot; convention so nothing gets picked up twice.</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v1-7" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v1-7">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v1-7">I have an external location — [DESCRIBE IT: a synced folder, a shared drive folder, an inbox, wherever things land for me to process] — where new items show up that I want my ship to notice and help me process. Set up a check-and-file pattern for it.
+
+1. Confirm what access you actually have to this location in this environment (filesystem access, a connector/MCP tool, etc.). If you don&#x27;t have access, tell me what&#x27;s needed.
+
+2. Add a step to my ship&#x27;s boot sequence: check this location for anything new since the last check. Surface what&#x27;s new in the boot alerts (a one-line count is enough, not a full dump) so I know something&#x27;s waiting without having to go look myself.
+
+3. Set up a &quot;Processed&quot; subfolder (or equivalent marking mechanism) within that location. After anything from the intake location has been read and acted on (discussed, filed, added to the board), move it there — so it&#x27;s never picked up as &quot;new&quot; again on a future boot check.
+
+4. Decide with me: does landing something in this folder mean &quot;process it automatically&quot; or &quot;flag it and wait for me to say go&quot;? Default to flagging and waiting unless I tell you otherwise — don&#x27;t take action on intake items without confirmation.
+
+Tell me what you found in the location right now, if anything, before setting up the automatic check.</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-[#1B3252] mb-5" style="box-shadow: 0 0 0 1px rgba(56,128,255,0.12), 0 4px 28px rgba(0,0,0,0.5);">
+          <button class="update-toggle w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer" data-panel="update-panel-v1-8" aria-expanded="false">
+            <div class="min-w-0">
+              <p class="font-mono text-xs uppercase text-[#FF2E88] tracking-[0.14em] mb-1.5">Update 8 of 8</p>
+              <h3 class="font-display text-lg font-semibold text-[#E6ECF5] uppercase truncate">No heavy dispatches for answerable questions</h3>
+              <p class="text-sm text-[#9FB3D2] mt-1">A cost-efficiency guardrail: stops your ship from spinning up an expensive research pass or specialized skill for something that&#x27;s already answerable from context or general knowledge.</p>
+            </div>
+            <span class="update-chevron font-mono text-[#7E97B8] text-lg shrink-0 transition-transform duration-200">&#9656;</span>
+          </button>
+          <div id="update-panel-v1-8" class="update-panel hidden">
+            <div class="bg-[#0C1B30] flex items-center justify-between px-5 py-3 border-t border-[#1B3252]">
+              <span class="font-mono text-sm text-[#9FB3D2]">paste this prompt</span>
+              <button class="update-copy-btn bg-transparent text-[#7E97B8] font-mono text-sm px-3 py-1.5 border border-[#1B3252] rounded hover:bg-[#0C1B30] hover:text-[#9FB3D2] hover:border-[#2F5A8C] transition-all cursor-pointer" data-target="update-prompt-v1-8">Copy</button>
+            </div>
+            <div class="code-block-body bg-[#070F1E] rounded-b-xl overflow-auto" style="max-height: 360px; padding: 20px;">
+              <pre class="font-mono text-[12px] text-[#CBD7EC] leading-relaxed whitespace-pre-wrap break-words"><code id="update-prompt-v1-8">I want a standing rule that stops my ship from reaching for expensive tools — a big research pass, a specialized multi-step skill, a strong-model sub-agent — when a question is actually answerable directly, from context already loaded or from general knowledge.
+
+1. Add this rule to my main instruction file: before dispatching any token-heavy skill or research pass, first check whether the question is answerable directly — from what&#x27;s already in context this session, from the spine, or from general knowledge that doesn&#x27;t require a live lookup. If it is, just answer it inline.
+
+2. Be specific about what counts as &quot;needs the heavy path&quot;: anything requiring live/current data (today&#x27;s calendar, a live database, a real-time status), anything requiring a source I haven&#x27;t already loaded this session, or anything where I&#x27;ve explicitly asked for a thorough/verified pass.
+
+3. Be specific about what does NOT need the heavy path: general knowledge questions, clarifying questions about my own system&#x27;s architecture (which should be answerable from the specs already on disk), and anything where the answer is already sitting in context from earlier in the conversation.
+
+4. This pairs with (but is distinct from) any existing &quot;confirm before token spend&quot; rule I already have — that rule gates spend once you&#x27;ve decided something needs a heavy dispatch; this rule is about not deciding that in the first place when it isn&#x27;t warranted.
+
+Show me the rule as you&#x27;d write it before adding it to my instruction file.</code></pre>
+            </div>
+          </div>
+        </div>
     </section>
 
     <!-- Footer -->
@@ -248,8 +533,39 @@ Report back what you found before changing anything.</code></pre>
   </div>
 
   <script>
-    document.querySelectorAll('.update-copy-btn').forEach(function (btn) {
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('.tab-btn').forEach(function (b) {
+          const isActive = b.dataset.tab === tab;
+          b.classList.toggle('bg-[#FF2E88]', isActive);
+          b.classList.toggle('text-[#091324]', isActive);
+          b.classList.toggle('font-semibold', isActive);
+          b.classList.toggle('text-[#9FB3D2]', !isActive);
+          b.classList.toggle('border', !isActive);
+          b.classList.toggle('border-[#1B3252]', !isActive);
+        });
+        document.querySelectorAll('.tab-panel').forEach(function (panel) {
+          panel.classList.toggle('hidden', panel.dataset.tab !== tab);
+        });
+      });
+    });
+
+    // Collapsible prompt cards
+    document.querySelectorAll('.update-toggle').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const panel = document.getElementById(btn.dataset.panel);
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        panel.classList.toggle('hidden', expanded);
+      });
+    });
+
+    // Copy single prompt
+    document.querySelectorAll('.update-copy-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         const target = document.getElementById(btn.dataset.target);
         navigator.clipboard.writeText(target.textContent).then(function () {
           const original = btn.textContent;
@@ -260,6 +576,28 @@ Report back what you found before changing anything.</code></pre>
             btn.textContent = original;
             btn.classList.remove('text-green-400');
             btn.classList.add('text-[#7E97B8]');
+          }, 2000);
+        });
+      });
+    });
+
+    // Copy all prompts in a series
+    document.querySelectorAll('.copy-all-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const ids = btn.dataset.ids.split(',');
+        const combined = ids.map(function (id, idx) {
+          const el = document.getElementById(id);
+          return '--- Update ' + (idx + 1) + ' of ' + ids.length + ' ---\n\n' + el.textContent;
+        }).join('\n\n\n');
+        navigator.clipboard.writeText(combined).then(function () {
+          const original = btn.dataset.label;
+          btn.textContent = 'Copied all';
+          btn.classList.add('text-green-400');
+          btn.classList.remove('text-[#9FD3DC]');
+          setTimeout(function () {
+            btn.textContent = original;
+            btn.classList.remove('text-green-400');
+            btn.classList.add('text-[#9FD3DC]');
           }, 2000);
         });
       });
