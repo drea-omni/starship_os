@@ -119,15 +119,17 @@ ipcMain.handle('terminal:create', (event, { cols = 80, rows = 24, workingDir } =
   const cfg = ensureConfig();
   const cwd = workingDir || cfg.workingDir || DEFAULT_STARSHIP_DIR;
 
-  const userShell = process.env.SHELL || '/bin/zsh';
-  ptyProcess = pty.spawn(userShell, ['-l', '-c', 'claude'], {
+  const isWin = process.platform === 'win32';
+  const userShell = isWin ? 'powershell.exe' : (process.env.SHELL || '/bin/zsh');
+  const shellArgs = isWin ? ['-NoLogo', '-Command', 'claude'] : ['-l', '-c', 'claude'];
+  ptyProcess = pty.spawn(userShell, shellArgs, {
     name: 'xterm-256color',
     cols, rows,
     cwd,
     env: {
       ...process.env,
       TERM: 'xterm-256color',
-      PATH: `${process.env.PATH}:/usr/local/bin:/opt/homebrew/bin`,
+      ...(isWin ? {} : { PATH: `${process.env.PATH}:/usr/local/bin:/opt/homebrew/bin` }),
     },
   });
 
