@@ -19,6 +19,42 @@ ONBOARDING.md
 05-outline-for-TEM-agents.md
 starter-prompt.md
 
+# Client-facing and work-confidential output
+# Added 2026-08-24 after a `git add -A` swept all of this toward a PUBLIC origin.
+# Every path here is work-confidential and lives in the working tree untracked,
+# which is one careless add away from being published. The wall only works if it
+# is written down.
+# NOTE: gitignore has no trailing comments — a `#` on a pattern line becomes
+# part of the pattern and the rule silently matches nothing. Comments go above.
+
+# Client handoff documents
+outputs/
+For Crew/
+Previous Crew/
+# per-client demo builds
+demos/
+decks/
+CLAUDE-DEMO.md
+# .real-backup / .demo-backup — CLAUDE.md itself is already ignored above
+CLAUDE.md.*
+# Omni query-result payloads
+qres.json
+
+# Generated indexes and caches. These apps read the confidential source above,
+# so anything they derive carries it verbatim — account names, deal stages, AE
+# names, renewal dates, licence counts. Verified 2026-08-24. The app CODE is
+# clean and stays tracked; only the derived data is walled off. Regenerate
+# locally with the build scripts.
+file-explorer/docx_cache/
+file-explorer/search_index.json
+file-explorer/tree.json
+library-app/index.json
+
+# Documents and transcripts — never source, always confidential
+*.docx
+*.vtt
+*.mp4
+
 # Presentations
 *.pptx
 *.gslides
