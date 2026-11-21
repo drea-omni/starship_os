@@ -2,7 +2,8 @@
 spine/
 operator/
 memory/
-.claude/
+.claude/*
+!.claude/settings.json
 scripts/
 prompts/
 Previous Crew/

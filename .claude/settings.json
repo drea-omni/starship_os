@@ -1,0 +1,5 @@
+{
+  "idleCompaction": {
+    "enabled": false
+  }
+}
